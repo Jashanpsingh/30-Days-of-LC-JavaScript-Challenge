@@ -1,0 +1,18 @@
+function memoize(fn) {
+    const cache = {};
+    const callCount = [];
+
+    return function(...args) {
+        const stringifiedArgs = JSON.stringify(args);
+        callCount.push(stringifiedArgs);
+
+        if (stringifiedArgs in cache) {
+            return cache[stringifiedArgs];
+        }
+
+        const result = fn(...args);
+        cache[stringifiedArgs] = result;
+
+        return result;
+    }
+}
