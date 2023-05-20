@@ -1,0 +1,22 @@
+var throttle = function(fn, t) {
+  let isCDing = false
+  let latestArgs = []
+
+  const throttledFunc = function(...args) {
+    if (isCDing) {
+        latestArgs = args
+        return null
+    }
+    isCDing = true
+    fn(...args)
+    setTimeout(() => {
+        isCDing = false
+        if (latestArgs.length) {
+          throttledFunc(...latestArgs)
+          latestArgs = []
+        }
+    }, t)
+  }
+
+  return throttledFunc
+};
