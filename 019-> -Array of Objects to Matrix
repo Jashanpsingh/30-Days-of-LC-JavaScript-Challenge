@@ -1,0 +1,59 @@
+/**
+ * @param {Array} arr
+ * @return {Matrix}
+ */
+var jsonToMatrix = function(arr) {
+    var layer = 1
+    const matrix = {}
+
+    for (let index in arr) {
+        generate(arr[index], index, true)
+        layer += 1
+    }
+
+    function generate(value = arr, path = '', is_initial = false) {
+        if (Array.isArray(value)) {
+            const prefix = is_initial ? '' : path + '.'
+            for (let [nested_path, nested_value] of Object.entries(value)) {
+                generate(nested_value, prefix + nested_path)
+            }
+            return
+        }
+
+        if (typeof value == 'object') {
+            if (value == null) {
+                if (matrix?.[path] === undefined) matrix[path] = []
+                matrix[path][layer] = value
+                return
+            }
+    
+            if (!Object.keys?.(value)?.length) {
+                return
+            }
+
+            const prefix = is_initial ? '' : path + '.'
+            for (let [nested_path, nested_value] of Object.entries(value)) {
+               generate(nested_value, prefix + nested_path) 
+            }
+            return
+        }
+
+        if(!is_initial){
+            if(matrix?.[path] === undefined)  { matrix[path] = [] }
+            matrix[path][layer] = value
+        }
+    }
+
+    const columns = Object.keys?.(matrix).sort()
+
+    const real_matrix = Array.from({length: layer -1}, () => new Array(columns.length).fill(""))
+    real_matrix.unshift(columns)
+ 
+    for (let column_number in columns) {
+        let column_name = columns[column_number]
+        for (let entry_layer in matrix?.[column_name]) {
+            matrix?.[column_name]?.[entry_layer] === undefined || (real_matrix[entry_layer][column_number] =  matrix?.[column_name]?.[entry_layer])
+        }
+    }
+    return real_matrix
+};
