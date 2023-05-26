@@ -1,0 +1,22 @@
+var flat = function (arr, n) {
+  function flattenHelper(arr, n, depth) {
+    if (depth >= n) {
+      // If we've reached the max depth, return the array as is
+      return arr;
+    }
+    let result = [];
+    for (let i = 0; i < arr.length; i++) {
+      if (Array.isArray(arr[i])) {
+        // If the element is an array, recursively flatten it
+        let subArray = flattenHelper(arr[i], n, depth + 1);
+        result.push(...subArray);
+      } else {
+        // Otherwise, add the element to the result array
+        result.push(arr[i]);
+      }
+    }
+    return result;
+  }
+
+  return flattenHelper(arr, n, 0);
+};
