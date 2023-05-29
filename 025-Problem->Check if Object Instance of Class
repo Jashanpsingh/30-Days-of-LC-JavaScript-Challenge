@@ -1,0 +1,17 @@
+var checkIfInstanceOf = function(obj, classFunction) {
+  if (obj === null || typeof obj === 'undefined' || classFunction === null || typeof classFunction !== 'function') {
+    return false;
+  }
+  const objProto = Object.getPrototypeOf(obj);
+  const classProto = classFunction.prototype;
+  return isPrototypeOf(objProto, classProto);
+};
+function isPrototypeOf(proto, targetProto) {
+  if (proto === null) {
+    return false;
+  }
+  if (proto === targetProto) {
+    return true;
+  } 
+  return isPrototypeOf(Object.getPrototypeOf(proto), targetProto);
+}
