@@ -1,0 +1,12 @@
+function* inorderTraversal(arr) {
+  function* traverse(arr) {
+    for (const element of arr) {
+      if (typeof element === 'number') {
+        yield element;
+      } else {
+        yield* traverse(element);
+      }
+    }
+  }
+  yield* traverse(arr);
+}
